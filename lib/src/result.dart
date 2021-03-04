@@ -1,7 +1,4 @@
-Result<String, Exception> eval() {
-  return Err(Exception('the message'));
-  // return Ok('hello');
-}
+import 'either.dart';
 
 abstract class Result<O, E> {
   const Result();
@@ -12,10 +9,13 @@ abstract class Result<O, E> {
   B? whenOk<B>(B Function(O ok) callback);
   B? whenErr<B>(B Function(E err) callback);
 
+  Either<L, R> toEither<L, R>({L Function(O ok)? ok, R Function(E err)? err});
+
   factory Result.from(O Function() function) {
     try {
       final result = function();
       return Ok(result);
+      // ignore: nullable_type_in_catch_clause
     } on E catch (e) {
       return Err(e);
     }
@@ -40,6 +40,12 @@ class Ok<O, E> extends Result<O, E> {
 
   @override
   B? whenErr<B>(B Function(E err) callback) => null;
+
+  @override
+  Either<L, R> toEither<L, R>({L Function(O ok)? ok, R Function(E err)? err}) {
+    if (ok == null) return left(val as L);
+    return left(ok(val));
+  }
 
   @override
   bool operator ==(other) => other is Ok && other.val == val;
@@ -69,6 +75,12 @@ class Err<O, E> extends Result<O, E> {
 
   @override
   B? whenErr<B>(B Function(E err) callback) => callback(val);
+
+  @override
+  Either<L, R> toEither<L, R>({L Function(O ok)? ok, R Function(E err)? err}) {
+    if (err == null) return right(val as R);
+    return right(err(val));
+  }
 
   @override
   bool operator ==(other) => other is Err && other.val == val;

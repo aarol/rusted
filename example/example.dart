@@ -1,21 +1,36 @@
 import 'package:rusted/rusted.dart';
 
-void main() {
-  final res = getResult();
+class FakeResponse {
+  FakeResponse(this.statusCode, this.body);
+  final int statusCode;
+  final String body;
+}
 
-  res.fold((ok) {
-    print('ok!');
-  }, (err) {
-    print('err!');
-  });
+void main() async {
+  var data = await transformData();
 
-  var value = res.whenOk((ok) {
-    return 'when Ok';
+  //  .fold() exposes the possible values
+  data.fold((data) {
+    //Display data
+    print(data);
+  }, (statusCode) {
+    //Display something about the error
+    print(statusCode);
   });
 }
 
-Result<String, Exception> getResult() {
-  return Result.from(() {
-    throw Exception('this exception will be caught');
+Future<Either<String, int>> transformData() async {
+  var data = await fetchData();
+  return data.toEither(
+    ok: (response) => response.body,
+    err: (err) => 404,
+  );
+}
+
+Future<Result<FakeResponse, Exception>> fetchData() async {
+  await Future.delayed(2.seconds);
+  return Result<FakeResponse, Exception>.from(() {
+    var response = FakeResponse(200, 'Success');
+    return response;
   });
 }
