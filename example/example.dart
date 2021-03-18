@@ -10,17 +10,18 @@ void main() async {
   var data = await transformData();
 
   //  .fold() exposes the possible values
-  data.fold((data) {
-    //Display data
-    print(data);
+  var output = data.fold((data) {
+    return data;
   }, (statusCode) {
-    //Display something about the error
-    print(statusCode);
+    return 'error: $statusCode';
   });
+
+  print(output);
 }
 
 Future<Either<String, int>> transformData() async {
   var data = await fetchData();
+  // .toEither()
   return data.toEither(
     ok: (response) => response.body,
     err: (err) => 404,
@@ -29,8 +30,23 @@ Future<Either<String, int>> transformData() async {
 
 Future<Result<FakeResponse, Exception>> fetchData() async {
   await Future.delayed(2.seconds);
-  return Result<FakeResponse, Exception>.from(() {
+  // .from() is an easy way to create a result.
+  return Result.of(() {
     var response = FakeResponse(200, 'Success');
     return response;
   });
+}
+
+// -------------------------------------------------------------
+//    The above code is functionally the same as the one below
+// -------------------------------------------------------------
+
+Future<Result<FakeResponse, Exception>> fetchData2() async {
+  await Future.delayed(2.seconds);
+  try {
+    var response = FakeResponse(200, 'Success');
+    return Ok(response);
+  } on Exception catch (e) {
+    return Err(e);
+  }
 }
