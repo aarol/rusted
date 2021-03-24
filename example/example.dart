@@ -7,7 +7,7 @@ class FakeResponse {
 }
 
 void main() async {
-  var data = await transformData();
+  var data = await fetchData();
 
   //  .fold() exposes the possible values
   var output = data.fold((data) {
@@ -17,15 +17,6 @@ void main() async {
   });
 
   print(output);
-}
-
-Future<Either<String, int>> transformData() async {
-  var data = await fetchData();
-  // .toEither()
-  return data.toEither(
-    ok: (response) => response.body,
-    err: (err) => 404,
-  );
 }
 
 Future<Result<FakeResponse, Exception>> fetchData() async {

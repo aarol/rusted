@@ -33,17 +33,6 @@ void main() {
     });
   });
 
-  group('either', () {
-    test('fold', () {
-      var res = left('hi');
-      var temp = res.fold((l) {
-        return 'left';
-      }, (r) {
-        return 'right';
-      });
-      expect(temp, 'left');
-    });
-  });
   group('time', () {
     test('int', () {
       expect(5.minutes, Duration(minutes: 5));

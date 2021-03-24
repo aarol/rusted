@@ -1,5 +1,3 @@
-import 'either.dart';
-
 abstract class Result<O, E> {
   const Result();
   B fold<B>(B Function(O ok) ok, B Function(E err) err);
@@ -10,8 +8,6 @@ abstract class Result<O, E> {
   B? whenErr<B>(B Function(E err) callback);
 
   Result<B, E> map<B>(Result<B, E> Function(O ok) ok);
-
-  Either<L, R> toEither<L, R>({L Function(O ok)? ok, R Function(E err)? err});
 
   factory Result.of(O Function() function) {
     try {
@@ -54,12 +50,6 @@ class Ok<O, E> extends Result<O, E> {
   }
 
   @override
-  Either<L, R> toEither<L, R>({L Function(O ok)? ok, R Function(E err)? err}) {
-    if (ok == null) return left(val as L);
-    return left(ok(val));
-  }
-
-  @override
   bool operator ==(other) => other is Ok && other.val == val;
 
   @override
@@ -89,12 +79,6 @@ class Err<O, E> extends Result<O, E> {
 
   @override
   Result<B, E> map<B>(Result<B, E> Function(O ok) ok) => Err(val);
-
-  @override
-  Either<L, R> toEither<L, R>({L Function(O ok)? ok, R Function(E err)? err}) {
-    if (err == null) return right(val as R);
-    return right(err(val));
-  }
 
   @override
   bool operator ==(other) => other is Err && other.val == val;
