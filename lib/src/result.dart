@@ -1,8 +1,21 @@
+import 'dart:async';
+
 abstract class Result<O, E> {
   factory Result.of(O Function() function) {
     assert(E != Null);
     try {
       final result = function();
+      return Ok(result);
+      // ignore: nullable_type_in_catch_clause
+    } on E catch (e) {
+      return Err(e);
+    }
+  }
+
+  static FutureOr<Result<O, E>> ofAsync<O, E>(
+      FutureOr<O> Function() function) async {
+    try {
+      final result = await function();
       return Ok(result);
       // ignore: nullable_type_in_catch_clause
     } on E catch (e) {

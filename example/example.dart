@@ -4,11 +4,13 @@ class FakeResponse {
   FakeResponse(this.statusCode, this.body);
   final int statusCode;
   final String body;
+
+  @override
+  String toString() => 'FakeResponse($statusCode, $body)';
 }
 
 void main() async {
   var data = await fetchData();
-
   //  .fold() exposes the possible values
   var output = data.fold((data) {
     return data;
@@ -21,8 +23,9 @@ void main() async {
 
 Future<Result<FakeResponse, Exception>> fetchData() async {
   await Future.delayed(2.seconds);
-  // .from() is an easy way to create a result.
-  return Result.of(() {
+  // .of() is an easy way to create a result.
+  return Result.ofAsync(() async {
+    await Future.delayed(1.seconds);
     var response = FakeResponse(200, 'Success');
     return response;
   });
