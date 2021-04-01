@@ -1,5 +1,6 @@
 import 'package:rusted/rusted.dart';
 import 'package:test/test.dart';
+import 'package:rusted/src/futureExt.dart';
 
 void main() {
   group('result', () {
@@ -38,6 +39,17 @@ void main() {
       };
 
       expect(() => res(), throwsA(isA<AssertionError>()));
+    });
+
+    test('should be able to fold future', () async {
+      var future = Future<Result<String, dynamic>>.value(Ok('a'));
+      final result = await future.foldAsync((ok) {
+        return 'ok';
+      }, (err) {
+        return 'err';
+      });
+
+      expect(result, 'ok');
     });
   });
 
