@@ -1,7 +1,6 @@
-A library for Dart developers.
-
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+# Rusted
+### Rust-inspired Result class in Dart
+### + Utilities for easier devopment
 
 ## Usage
 
@@ -10,8 +9,12 @@ A simple usage example:
 ```dart
 import 'package:rusted/rusted.dart';
 
-main() {
-  var awesome = new Awesome();
+void main() {
+  var result = Ok('hi');
+  result.fold(
+    (ok) => print(ok),
+    (err) => print(err),
+  );
 }
 ```
 
