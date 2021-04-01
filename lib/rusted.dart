@@ -3,4 +3,5 @@
 /// More dartdocs go here.
 export 'src/result.dart';
 export 'src/time.dart';
+export 'src/futureExt.dart';
 // TODO: Export any libraries intended for clients of this package.
