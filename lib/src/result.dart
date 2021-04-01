@@ -1,4 +1,15 @@
 abstract class Result<O, E> {
+  factory Result.of(O Function() function) {
+    assert(E != Null);
+    try {
+      final result = function();
+      return Ok(result);
+      // ignore: nullable_type_in_catch_clause
+    } on E catch (e) {
+      return Err(e);
+    }
+  }
+
   const Result();
   B fold<B>(B Function(O ok) ok, B Function(E err) err);
 
@@ -8,16 +19,6 @@ abstract class Result<O, E> {
   B? whenErr<B>(B Function(E err) callback);
 
   Result<B, E> map<B>(Result<B, E> Function(O ok) ok);
-
-  factory Result.of(O Function() function) {
-    try {
-      final result = function();
-      return Ok(result);
-      // ignore: nullable_type_in_catch_clause
-    } on E catch (e) {
-      return Err(e);
-    }
-  }
 
   bool get isOk;
   bool get isErr;

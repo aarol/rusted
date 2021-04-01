@@ -31,6 +31,14 @@ void main() {
       });
       expect(res2.isErr, true);
     });
+
+    test('from should not accept null as error type', () {
+      var res = () {
+        Result<String, Null>.of(() => 'val');
+      };
+
+      expect(() => res(), throwsA(isA<AssertionError>()));
+    });
   });
 
   group('time', () {
