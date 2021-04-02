@@ -1,6 +1,24 @@
 import 'dart:async';
 
-abstract class Result<O, E> {
+import 'package:equatable/equatable.dart';
+
+/// A Result is an object which can hold two possible values,
+/// an `Ok` or an `Err`.
+///
+/// Example:
+/// ```dart
+/// Result<String, Exception> getData() {
+///   return Ok('value');
+/// }
+/// void main() {
+///   final result = getData();
+///   result.fold(
+///     (ok) => print(ok),
+///     (err) => print(err),
+///   );
+/// }
+/// ```
+abstract class Result<O, E> extends Equatable {
   factory Result.of(O Function() function) {
     assert(E != Null);
     try {
@@ -14,6 +32,7 @@ abstract class Result<O, E> {
 
   static FutureOr<Result<O, E>> ofAsync<O, E>(
       FutureOr<O> Function() function) async {
+    assert(E != Null);
     try {
       final result = await function();
       return Ok(result);
@@ -31,7 +50,7 @@ abstract class Result<O, E> {
   B? whenOk<B>(B Function(O ok) callback);
   B? whenErr<B>(B Function(E err) callback);
 
-  Result<B, E> map<B>(Result<B, E> Function(O ok) ok);
+  Result<A, B> map<A, B>({A Function(O ok)? ok, B Function(E err)? err});
 
   bool get isOk;
   bool get isErr;
@@ -59,11 +78,6 @@ class Ok<O, E> extends Result<O, E> {
   B? whenErr<B>(B Function(E err) callback) => null;
 
   @override
-  Result<B, E> map<B>(Result<B, E> Function(O ok) ok) {
-    return ok(val);
-  }
-
-  @override
   bool operator ==(other) => other is Ok && other.val == val;
 
   @override
@@ -71,6 +85,18 @@ class Ok<O, E> extends Result<O, E> {
 
   @override
   bool get isErr => false;
+
+  @override
+  Result<A, B> map<A, B>({A Function(O ok)? ok, B Function(E err)? err}) {
+    if (ok != null) {
+      return Ok(ok(val));
+    } else {
+      return Ok(val as A);
+    }
+  }
+
+  @override
+  List<Object?> get props => [val];
 }
 
 /// See also:
@@ -92,7 +118,13 @@ class Err<O, E> extends Result<O, E> {
   B? whenErr<B>(B Function(E err) callback) => callback(val);
 
   @override
-  Result<B, E> map<B>(Result<B, E> Function(O ok) ok) => Err(val);
+  Result<A, B> map<A, B>({A Function(O ok)? ok, B Function(E err)? err}) {
+    if (err != null) {
+      return Err(err(val));
+    } else {
+      return Err(val as B);
+    }
+  }
 
   @override
   bool operator ==(other) => other is Err && other.val == val;
@@ -102,6 +134,9 @@ class Err<O, E> extends Result<O, E> {
 
   @override
   bool get isErr => true;
+
+  @override
+  List<Object?> get props => [val];
 }
 
 /// Use when you need to return a type of `Result`,

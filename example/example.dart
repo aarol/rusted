@@ -1,7 +1,8 @@
+import 'dart:async';
 import 'package:rusted/rusted.dart';
 
 class FakeResponse {
-  FakeResponse(this.statusCode, this.body);
+  const FakeResponse(this.statusCode, this.body);
   final int statusCode;
   final String body;
 
@@ -14,16 +15,13 @@ void main() async {
   //  .fold() exposes the possible values
   var output = data.fold((data) {
     return data;
-  }, (statusCode) {
-    return 'error: $statusCode';
+  }, (error) {
+    return 'error: $error';
   });
-
-  print(output);
 }
 
 Future<Result<FakeResponse, Exception>> fetchData() async {
-  await Future.delayed(2.seconds);
-  // .of() is an easy way to create a result.
+  // .of() or .ofAsync() is an easy way to create a result.
   return Result.ofAsync(() async {
     await Future.delayed(1.seconds);
     var response = FakeResponse(200, 'Success');
@@ -36,8 +34,8 @@ Future<Result<FakeResponse, Exception>> fetchData() async {
 // -------------------------------------------------------------
 
 Future<Result<FakeResponse, Exception>> fetchData2() async {
-  await Future.delayed(2.seconds);
   try {
+    await Future.delayed(2.seconds);
     var response = FakeResponse(200, 'Success');
     return Ok(response);
   } on Exception catch (e) {
