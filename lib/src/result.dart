@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:equatable/equatable.dart';
-
 /// A Result is an object which can hold two possible values,
 /// an `Ok` or an `Err`.
 ///
@@ -18,7 +16,7 @@ import 'package:equatable/equatable.dart';
 ///   );
 /// }
 /// ```
-abstract class Result<O, E> extends Equatable {
+abstract class Result<O, E> {
   factory Result.of(O Function() function) {
     assert(E != Null);
     try {
@@ -78,9 +76,6 @@ class Ok<O, E> extends Result<O, E> {
   B? whenErr<B>(B Function(E err) callback) => null;
 
   @override
-  bool operator ==(other) => other is Ok && other.val == val;
-
-  @override
   bool get isOk => true;
 
   @override
@@ -96,7 +91,7 @@ class Ok<O, E> extends Result<O, E> {
   }
 
   @override
-  List<Object?> get props => [val];
+  bool operator ==(other) => other is Ok && other.val == val;
 }
 
 /// See also:
@@ -127,16 +122,13 @@ class Err<O, E> extends Result<O, E> {
   }
 
   @override
-  bool operator ==(other) => other is Err && other.val == val;
-
-  @override
   bool get isOk => false;
 
   @override
   bool get isErr => true;
 
   @override
-  List<Object?> get props => [val];
+  bool operator ==(other) => other is Err && other.val == val;
 }
 
 /// Use when you need to return a type of `Result`,

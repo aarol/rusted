@@ -18,6 +18,7 @@ void main() async {
   }, (error) {
     return 'error: $error';
   });
+  print(output);
 }
 
 Future<Result<FakeResponse, Exception>> fetchData() async {
