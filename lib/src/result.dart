@@ -28,7 +28,7 @@ abstract class Result<O, E> {
     }
   }
 
-  static FutureOr<Result<O, E>> ofAsync<O, E>(
+  static Future<Result<O, E>> ofAsync<O, E>(
       FutureOr<O> Function() function) async {
     assert(E != Null);
     try {
