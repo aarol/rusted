@@ -17,12 +17,12 @@ void main() {
     }
 
     test('should return value when ok', () async {
-      final result = await futureOk().foldAsync((ok) => ok, (err) => err);
+      final result = await futureOk().thenFold((ok) => ok, (err) => err);
       expect(result, tOk);
     });
 
     test('should return value when err', () async {
-      final result = await futureErr().foldAsync((ok) => ok, (err) => err);
+      final result = await futureErr().thenFold((ok) => ok, (err) => err);
       expect(result, tErr);
     });
   });
@@ -37,12 +37,12 @@ void main() {
     }
 
     test('should return value when ok', () async {
-      final result = await futureOrOk().foldAsync((ok) => ok, (err) => err);
+      final result = await futureOrOk().thenFold((ok) => ok, (err) => err);
       expect(result, tOk);
     });
 
     test('should return value when err', () async {
-      final result = await futureOrErr().foldAsync((ok) => ok, (err) => err);
+      final result = await futureOrErr().thenFold((ok) => ok, (err) => err);
       expect(result, tErr);
     });
   });

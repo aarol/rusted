@@ -17,7 +17,8 @@ import 'dart:async';
 /// }
 /// ```
 abstract class Result<O, E> {
-  factory Result.of(O Function() function) {
+  const Result();
+  factory Result.ofSync(O Function() function) {
     assert(E != Null);
     try {
       final result = function();
@@ -28,8 +29,7 @@ abstract class Result<O, E> {
     }
   }
 
-  static Future<Result<O, E>> ofAsync<O, E>(
-      FutureOr<O> Function() function) async {
+  static Future<Result<O, E>> of<O, E>(FutureOr<O> Function() function) async {
     assert(E != Null);
     try {
       final result = await function();
@@ -40,7 +40,6 @@ abstract class Result<O, E> {
     }
   }
 
-  const Result();
   B fold<B>(B Function(O ok) ok, B Function(E err) err);
 
   O unwrap([reason]);
@@ -57,6 +56,8 @@ abstract class Result<O, E> {
   String toString() => fold((ok) => 'Ok($ok)', (err) => 'Err($err)');
 }
 
+/// Creates the `Ok` value of a `Result`
+///
 /// See also:
 /// * `ok(..)` for returing a `Result` when you can't return `Ok` itself.
 class Ok<O, E> extends Result<O, E> {

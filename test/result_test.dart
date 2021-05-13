@@ -86,16 +86,16 @@ void main() {
     });
   });
 
-  group('of', () {
+  group('ofSync', () {
     test('should return ok when is ok', () {
-      final result = Result.of(() {
+      final result = Result.ofSync(() {
         return tOk;
       });
       expect(result.isOk, true);
     });
 
     test('should return err when is err', () {
-      final result = Result.of(() {
+      final result = Result.ofSync(() {
         throw Exception();
       });
       expect(result.isOk, false);
@@ -103,7 +103,7 @@ void main() {
 
     test('should only catch defined type', () {
       Result<String, Exception> result() {
-        return Result<String, Exception>.of(() => [][1]);
+        return Result<String, Exception>.ofSync(() => [][1]);
       }
 
       expect(() => result(), throwsA(isRangeError));
@@ -111,23 +111,23 @@ void main() {
 
     test('should throw when error type is Null', () {
       Result<String, Null> result() {
-        return Result<String, Null>.of(() => tOk);
+        return Result<String, Null>.ofSync(() => tOk);
       }
 
       expect(() => result(), throwsA(isA<AssertionError>()));
     });
   });
 
-  group('ofAsync', () {
+  group('of', () {
     test('should return ok when is ok', () async {
-      final result = await Result.ofAsync(() {
+      final result = await Result.of(() {
         return tOk;
       });
       expect(result.isOk, true);
     });
 
     test('should return err when is err', () async {
-      final result = await Result.ofAsync(() {
+      final result = await Result.of(() {
         throw Exception();
       });
       expect(result.isOk, false);
@@ -135,7 +135,7 @@ void main() {
 
     test('should only catch defined type', () {
       FutureOr<Result<String, Exception>> result() {
-        return Result.ofAsync(() => [][1]);
+        return Result.of(() => [][1]);
       }
 
       expect(() => result(), throwsA(isRangeError));
@@ -143,7 +143,7 @@ void main() {
 
     test('should throw when error type is Null', () {
       FutureOr<Result<String, Null>> result() {
-        return Result.ofAsync(() => tOk);
+        return Result.of(() => tOk);
       }
 
       expect(() => result(), throwsA(isA<AssertionError>()));

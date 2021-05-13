@@ -23,7 +23,7 @@ void main() async {
 
 Future<Result<FakeResponse, Exception>> fetchData() async {
   // .of() or .ofAsync() is an easy way to create a result.
-  return Result.ofAsync(() async {
+  return Result.of(() async {
     await Future.delayed(1.seconds);
     var response = FakeResponse(200, 'Success');
     return response;
