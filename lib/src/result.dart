@@ -157,7 +157,12 @@ class Ok<O, E> extends Result<O, E> {
   }
 
   @override
-  bool operator ==(other) => other is Ok && other.val == val;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Ok && runtimeType == other.runtimeType && val == other.val;
+
+  @override
+  int get hashCode => val.hashCode;
 }
 
 /// Creates the `Ok` value of a `Result`
@@ -196,7 +201,12 @@ class Err<O, E> extends Result<O, E> {
   bool get isErr => true;
 
   @override
-  bool operator ==(other) => other is Err && other.val == val;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Err && runtimeType == other.runtimeType && val == other.val;
+
+  @override
+  int get hashCode => val.hashCode;
 }
 
 /// Use when you need to return a type of `Result`,

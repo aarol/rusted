@@ -177,4 +177,14 @@ void main() {
       );
     });
   });
+  group('equality', () {
+    test('Ok equality', () {
+      final res = getOk();
+      expect(res, ok<String, String>(tOk));
+    });
+    test('Err equality', () {
+      final res = getErr();
+      expect(res, err<String, String>(tErr));
+    });
+  });
 }
