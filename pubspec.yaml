@@ -1,6 +1,6 @@
 name: rusted
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
+description: Rusted brings the Result class from Rust along with other utilities.
+version: 1.0.1
 repository: https://github.com/aarol/rusted
 environment:
   sdk: '>=2.12.0 <3.0.0'
