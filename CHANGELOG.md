@@ -1,3 +1,3 @@
-## 1.0.0
+# 1.0.0 - 13.5.2021
 
-- Initial version, created by Stagehand
+- Initial version
