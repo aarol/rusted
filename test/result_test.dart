@@ -16,8 +16,8 @@ void main() {
     return err(tErr);
   }
 
-  dynamic foldResult(Result result) {
-    return result.fold((ok) => ok, (err) => err);
+  T foldResult<T>(Result<T, T> result) {
+    return result.fold<T>((ok) => ok, (err) => err);
   }
 
   group('fold', () {
@@ -62,26 +62,26 @@ void main() {
   group('whenOk', () {
     test('should return value when is ok', () {
       final result = getOk();
-      final value = result.whenOk((ok) => ok);
+      final value = result.ok();
       expect(value != null, true);
     });
 
     test('should return null when is err', () {
       final result = getErr();
-      final value = result.whenOk((ok) => ok);
+      final value = result.ok();
       expect(value != null, false);
     });
   });
   group('whenErr', () {
     test('should return value when is err', () {
       final result = getErr();
-      final value = result.whenErr((err) => err);
+      final value = result.err();
       expect(value != null, true);
     });
 
     test('should return null when is ok', () {
       final result = getOk();
-      final value = result.whenErr((err) => err);
+      final value = result.err();
       expect(value != null, false);
     });
   });
@@ -165,12 +165,16 @@ void main() {
   });
 
   group('map', () {
-    test('', () {
+    test('should remap values to a new result', () {
       final result = getErr();
-      var value = result.map(
+      var newResult = result.map(
         ok: (ok) => 1,
+        err: (err) => Error(),
       );
-      print(value);
+      newResult.fold(
+        (ok) => expect(ok, 1),
+        (err) => expect(err, isA<Error>()),
+      );
     });
   });
 }
