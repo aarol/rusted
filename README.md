@@ -35,7 +35,9 @@ this package was made to fill that purpose.
 
 A result is especially useful in situations where catching errors isn't desirable, such as in the `mapEventToState` function of a Bloc, when it is much better to handle errors in the repository, making refactoring of the Bloc easier.
 
-[Dartz][dartz] is a great functional programming package which uses an [Either][either] class. Unfortunately it is not documented at all and can be a bit overwhelming.
+With `Result` it is easier to deliver errors to the UI while forcing you to handle them.
+
+[Dartz][dartz] is a great functional programming package which uses an [Either][either] class. Unfortunately it is not documented at all and can be a bit confusing.
 
 ---
 ## Features and bugs
