@@ -1,5 +1,5 @@
 name: rusted
-description: Rusted brings the Result class from Rust along with other utilities.
+description: Brings the Result class from Rust along with other utilities.
 version: 1.0.1
 repository: https://github.com/aarol/rusted
 environment:

@@ -10,6 +10,7 @@ A simple usage example:
 
 ```dart
 import 'package:rusted/rusted.dart';
+import 'package:http/http.dart';
 
 void main() {
   Result<String, Exception> result = Ok('hi');
@@ -19,15 +20,41 @@ void main() {
   );
 }
 ```
+### Example of usage with Cubit
+```dart
+class MyCubit extends Cubit<MyState> {
+  MyCubit(this.myRepo) : super(MyInitialState());
+
+  final MyRepository myRepo;
+
+  void login() async {
+    final result = await myRepo.login();
+    result.fold(
+      (ok) => emit(MyLoggedInState(ok)),
+      (err) => emit(MyFailedLoginState(err)),
+    );
+  }
+}
+
+class MyRepository {
+  Future<Result<String, http.ClientException>> login() {
+    return Result.of(() async {
+      var res = http.get(URL);
+      return res.body['username'];
+    });
+  }
+}
+```
 
 ## Time
 ```dart
-await Future.delayed(1.5.minutes);
+Duration(seconds: 5) == 5.seconds; //true
 
-await Future.delayed(5.seconds);
+Duration(milliseconds: 250) == 250.milliseconds; // true
 
-await Future.delayed(250.milliseconds);
+Duration(minutes: 1, seconds: 30) == 1.5.minutes; // true
 ```
+Currently autocomplete and import doesn't work on extension methods, but typing the respective classes (`IntTime` or `DoubleTime`) will import it.
 
 # Motive
 Since Dart doesn't provide a class similiar to Rust's Result,
@@ -40,6 +67,14 @@ With `Result` it is easier to deliver errors to the UI while forcing you to hand
 [Dartz][dartz] is a great functional programming package which uses an [Either][either] class. Unfortunately it is not documented at all and can be a bit confusing.
 
 ---
+
+## Todo
+
+* When [Type aliases][typealias] land in Dart, create aliases for common types, for example
+
+  `typedef ResultEx<T> = Result<T, Exception>`
+
+---
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
@@ -47,3 +82,4 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [either]: https://github.com/spebbe/dartz/blob/master/lib/src/either.dart
 [dartz]: https://pub.dev/packages/dartz
 [tracker]: https://github.com/aarol/rusted/issues
+[typealias]: https://github.com/dart-lang/language/issues/65

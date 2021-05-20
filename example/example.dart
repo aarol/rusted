@@ -12,9 +12,9 @@ class FakeResponse {
 
 void main() async {
   var data = await fetchData();
-  //  .fold() exposes the possible values
+  // .fold() exposes the possible values
   var output = data.fold((data) {
-    return data;
+    return data.body;
   }, (error) {
     return 'error: $error';
   });
@@ -39,6 +39,7 @@ Future<Result<FakeResponse, Exception>> fetchData2() async {
     await Future.delayed(2.seconds);
     var response = FakeResponse(200, 'Success');
     return Ok(response);
+    // catches only the exceptions
   } on Exception catch (e) {
     return Err(e);
   }
